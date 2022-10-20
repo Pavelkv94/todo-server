@@ -1,0 +1,298 @@
+openapi: 3.0.3
+info:
+  title: Todolist API - OpenAPI 3.0
+  description: |-
+    Some useful links:
+    - https://annatodolist.herokuapp.com/
+  version: 1.0.11
+tags:
+  - name: Todolists
+    description: Todolists API
+  - name: Tasks
+    description: Tasks API
+paths:
+  /todo-lists:
+    get:
+      tags:
+        - Todolists
+      summary: Get list with todolists
+      description: Get list with todolists
+      operationId: getTodolist
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todolist'              
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Todolist not found
+        '405':
+          description: Validation exception
+
+    post:
+      tags:
+        - Todolists
+      summary: Add a new Todolist
+      description: Add a new Todolist
+      operationId: addTodolist
+      requestBody:
+        description: Create a new Todolist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: New Todolist
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+
+  /todo-lists/{todolistId}:
+    put:
+      tags:
+        - Todolists
+      summary: Update title of todolist
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: string
+          required: true
+          description: ID of the todolist
+      description:  Update title of todolist
+      operationId: updateTodolist
+      requestBody:
+        description: Update a Todolist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated title Todolist
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+
+    delete:
+      tags:
+        - Todolists
+      summary: Delete todolist
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: string
+          required: true
+          description: ID of the todolist
+      description: delete todolist
+      operationId: deleteTodolist
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+  /todo-lists/{todolistId}/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: Get list with Tasks
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: integer
+          required: true
+          description: ID of the todolist
+      description: Get list with Tasks
+      operationId: getTasks
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'              
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Todolist not found
+        '405':
+          description: Validation exception
+
+    post:
+      tags:
+        - Tasks
+      summary: Add a new Tasks
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: integer
+          required: true
+          description: ID of the todolist
+      description: Add a new Tasks
+      operationId: addTasks
+      requestBody:
+        description: Create a new Tasks
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: New Task
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+  /todo-lists/{todolistId}/tasks/{taskId}:
+    put:
+      tags:
+        - Tasks
+      summary: Update Task
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: string
+          required: true
+          description: ID of the todolist
+        - in: path
+          name: taskId
+          schema:
+            type: string
+          required: true
+          description: ID of the task
+      description:  Update  Task
+      operationId: updateTask
+      requestBody:
+        description: Update a Task
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated title Todolist
+                isDone:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+
+    delete:
+      tags:
+        - Tasks
+      summary: Delete todolist
+      parameters:
+        - in: path
+          name: todolistId
+          schema:
+            type: string
+          required: true
+          description: ID of the todolist
+        - in: path
+          name: taskId
+          schema:
+            type: string
+          required: true
+          description: ID of the task
+      description: delete todolist
+      operationId: deleteTask
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                    
+components:
+  schemas:
+        
+    Todolist:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "635125edcbfecda337a706c5"
+        title:
+          type: string
+          example: New Todolist
+    Todolist_POST:
+      type: object
+      properties:
+        title:
+          type: string
+          example: New Todolist
+    Task:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "635125edcbfecda337a706c5"
+        title:
+          type: string
+          example: New Todolist
+        isDone:
+          type: boolean
+          example: false
+        todolistId:
+          type: string
+          example: "635125edcbfecda337a706c5"
+    

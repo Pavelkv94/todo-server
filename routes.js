@@ -25,7 +25,7 @@ server.post('/todo-lists', (req, res) => {
 server.get('/todo-lists', (_req, res) => {
   Todolist.find({}).exec((err, data) => {
     if (err) return res.status(400).json({ err });
-    res.json(data);
+    res.json(data.map(el => ({_id: el._id, title: el.title})));
   });
 });
 
@@ -64,7 +64,7 @@ server.delete('/todo-lists/:todolistId', (req, res) => {
 server.get('/todo-lists/:todolistId/tasks', (req, res) => {
   Task.find({todolistId: req.params.todolistId}).exec((err, data) => {
     if (err) return res.status(400).json({ err });
-    res.json(data);
+    res.json(data.map(el => ({_id: el._id, title: el.title, todolistId: el.todolistId, isDone: el.isDone})));
   });
 });
 
@@ -73,6 +73,7 @@ server.post('/todo-lists/:todolistId/tasks', (req, res) => {
   let newTask = new Task();
   newTask.title = title;
   newTask.todolistId = req.params.todolistId;
+  newTask.isDone = false;
   newTask.save((err, data) => {
     if (err) {
       return res.status(400).json({
